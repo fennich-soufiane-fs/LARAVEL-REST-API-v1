@@ -12,7 +12,22 @@ use App\Http\Requests\EditPostRequest;
 class PostController extends Controller
 {
     public function index() {
-        return 'Liste des articles';
+        try {
+            $posts = Post::all(); 
+    
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Posts retrieved successfully',
+                'data' => $posts
+            ], 200);
+    
+        } catch (Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'status_message' => 'An error occurred while fetching posts.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function store(CreatePostRequest $request) {
