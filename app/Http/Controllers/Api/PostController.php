@@ -33,11 +33,18 @@ class PostController extends Controller
         }
     }
 
-    public function update(EditPostRequest $request, $id) {
-        $post = Post::find($id);
-        $post->titre = $request->titre;
-        $post->description = $request->description;
-
-        $post->save();
+    public function update(EditPostRequest $request, Post $post) {
+        try {
+            $post->titre = $request->titre;
+            $post->description = $request->description;
+            $post->save();
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Posts Updated Successfully',
+                'data' => $post,
+            ]);
+        } catch (Exception $e) {
+            return reqponse()->json($e);
+        }
     }
 }
