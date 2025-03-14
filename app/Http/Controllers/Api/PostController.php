@@ -9,7 +9,6 @@ use App\Http\Requests\CreatePostRequest;
 use Exception;
 use App\Http\Requests\EditPostRequest;
 
-
 class PostController extends Controller
 {
     public function index() {
@@ -47,4 +46,30 @@ class PostController extends Controller
             return reqponse()->json($e);
         }
     }
+
+    public function delete($id) {
+        try {
+            $post = Post::find($id); // Trouver le post sans lancer une exception automatique
+    
+            if (!$post) {
+                return response()->json([
+                    'status_code' => 404,
+                    'status_message' => 'Post Not Found'
+                ], 404);
+            }
+    
+            $post->delete();
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Post Deleted Successfully',
+            ]);
+    
+        } catch (Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'status_message' => 'An error occurred.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    } 
 }

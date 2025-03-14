@@ -10,9 +10,9 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('posts', [PostController::class, 'index']);
-
 Route::post('posts/create', [PostController::class, 'store']);
-
 Route::put('posts/edit/{post}', [PostController::class, 'update']);
+Route::delete('posts/{post}', [PostController::class, 'delete']);
+
 
 
