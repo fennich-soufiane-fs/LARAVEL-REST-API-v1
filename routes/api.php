@@ -13,3 +13,6 @@ Route::get('posts', [PostController::class, 'index']);
 
 Route::post('posts/create', [PostController::class, 'store']);
 
+Route::put('posts/edit/{id}', [PostController::class, 'update']);
+
+

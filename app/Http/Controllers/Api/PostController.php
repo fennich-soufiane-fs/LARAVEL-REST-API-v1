@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Http\Requests\CreatePostRequest;
 use Exception;
+use App\Http\Requests\EditPostRequest;
 
 
 class PostController extends Controller
@@ -30,5 +31,13 @@ class PostController extends Controller
         } catch(Exeption $e) {
             return response()->json($e);
         }
+    }
+
+    public function update(EditPostRequest $request, $id) {
+        $post = Post::find($id);
+        $post->titre = $request->titre;
+        $post->description = $request->description;
+
+        $post->save();
     }
 }
