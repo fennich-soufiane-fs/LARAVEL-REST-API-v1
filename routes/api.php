@@ -16,4 +16,5 @@ Route::put('posts/edit/{post}', [PostController::class, 'update']);
 Route::delete('posts/{post}', [PostController::class, 'delete']);
 
 Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login']);
 
