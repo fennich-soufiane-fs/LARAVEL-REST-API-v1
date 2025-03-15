@@ -8,6 +8,8 @@ use App\Models\Post;
 use App\Http\Requests\CreatePostRequest;
 use Exception;
 use App\Http\Requests\EditPostRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 class PostController extends Controller
 {
@@ -52,6 +54,7 @@ class PostController extends Controller
             $post = new Post();
             $post->titre = $request->titre;
             $post->description = $request->description;
+            $post->user_id = auth()->user()->id;
             $post->save();
 
             return response()->json([
