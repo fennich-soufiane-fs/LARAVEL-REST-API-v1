@@ -15,12 +15,12 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     Route::post('posts/create', [PostController::class, 'store']);
+    Route::put('posts/edit/{post}', [PostController::class, 'update']);
+    Route::delete('posts/{post}', [PostController::class, 'delete']);
 });
 
 
 Route::get('posts', [PostController::class, 'index']);
-Route::put('posts/edit/{post}', [PostController::class, 'update']);
-Route::delete('posts/{post}', [PostController::class, 'delete']);
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);

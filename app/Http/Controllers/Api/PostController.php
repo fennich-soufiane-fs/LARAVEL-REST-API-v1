@@ -71,7 +71,14 @@ class PostController extends Controller
         try {
             $post->titre = $request->titre;
             $post->description = $request->description;
-            $post->save();
+            if($post->user_id === auth()->user()->id) {
+                $post->save();                
+            } else {
+                return response()->json([
+                'status_code' => 422,
+                'status_message' => 'You are not the author of this post',
+                ]);
+            }
             return response()->json([
                 'status_code' => 200,
                 'status_message' => 'Posts Updated Successfully',
@@ -84,21 +91,25 @@ class PostController extends Controller
 
     public function delete($id) {
         try {
-            $post = Post::find($id); // Trouver le post sans lancer une exception automatique
-    
+            $post = Post::find($id); // Trouver le post sans lancer une exception automatique               
+            if($post->user_id === auth()->user()->id) {
+                $post->delete();             
+            } else {
+                return response()->json([
+                'status_code' => 422,
+                'status_message' => 'You are not the author of this post',
+                ]);
+            }           
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Post Deleted Successfully',
+            ]);
             if (!$post) {
                 return response()->json([
                     'status_code' => 404,
                     'status_message' => 'Post Not Found'
                 ], 404);
             }
-    
-            $post->delete();
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => 'Post Deleted Successfully',
-            ]);
-    
         } catch (Exception $e) {
             return response()->json([
                 'status_code' => 500,
