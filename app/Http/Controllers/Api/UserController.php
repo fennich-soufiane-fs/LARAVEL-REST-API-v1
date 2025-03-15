@@ -8,8 +8,8 @@ use App\Http\Requests\RegisterRequestUser;
 use App\Http\Requests\LoginUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Exception;
-
 
 
 class UserController extends Controller
@@ -44,18 +44,24 @@ class UserController extends Controller
 
     public function login(LoginUserRequest $request) {
 
-        if (auth()->attempt($request->only(['email', 'password'])))
-         {
-            
-        } else {
+        if (Auth::attempt($request->only(['email','password']))) {
+            $user = Auth::user();
+
+            // Utilisation de config() au lieu de env()
+            $tokenName = config('app.token_secret_key');
+            $token = $user->createToken($tokenName)->plainTextToken;
 
             return response()->json([
-                'status_code' => 401,
-                'status_message' => 'Nonexistent user',
+                'status_code' => 200,
+                'status_message' => 'User connected successfully',
+                'user' => $user,
+                'token' => $token
             ]);
-        }
+        } 
 
-        
-        
+        return response()->json([
+            'status_code' => 401,
+            'status_message' => 'Invalid credentials. Please check your email and password.',
+        ]);        
     }
 }

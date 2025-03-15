@@ -24,7 +24,7 @@ class LoginUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users, email',//table user column email
+            'email' => 'required|email|exists:users,email',//table user column email
             'password' => 'required'
         ];
     }
