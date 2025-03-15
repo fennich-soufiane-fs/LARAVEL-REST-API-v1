@@ -11,14 +11,31 @@ use App\Http\Requests\EditPostRequest;
 
 class PostController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
+
         try {
+            $query = Post::query();
+            $perPage = 2;
+            $page = $request->input('page', 1);
+            $search = $request->input('search');
+
+            if($search) {
+                // $query->whereRaw("titre LIKE '%" . $search ."%'");
+                $query->where('titre', 'LIKE', "%{$search}%");
+            }
+
+            $total = $query->count();
+
+            $result = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
+
             $posts = Post::all(); 
     
             return response()->json([
                 'status_code' => 200,
                 'status_message' => 'Posts retrieved successfully',
-                'data' => $posts
+                'current_page' => $page,
+                'last_page' => ceil($total / $perPage),
+                'items' => $result
             ], 200);
     
         } catch (Exception $e) {
